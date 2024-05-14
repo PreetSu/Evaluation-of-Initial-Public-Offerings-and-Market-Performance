@@ -1,0 +1,39 @@
+---
+title: "Group project"
+author: "Ziqian Ding"
+date: "2024-04-22"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# read data
+IPO.df <- read.csv("final.csv")
+head(IPO.df)
+# Load the required libraries
+library(dplyr)
+
+# Select relevant variables for the regression model
+variables <- c("State","IPO_Price", "IPO_Shares", "IPO_Offer_Amount", "avg_PRC","avg_VOL","Cum_AbnRet")
+
+# Filter out any missing values
+data <- na.omit(IPO.df[, variables])
+sum(is.na(data))
+str(data)
+# Convert to factor
+data$State <- as.factor(data$State)
+# Convert chr to num
+data$IPO_Price <- as.numeric(gsub("[^0-9.]", "", data$IPO_Price))
+data$IPO_Shares <- as.numeric(gsub("[^0-9]", "", data$IPO_Shares))
+data$IPO_Offer_Amount <- as.numeric(gsub("[^0-9.]", "", data$IPO_Offer_Amount))
+
+# Build the regression model
+model <- lm(Cum_AbnRet ~ ., data = data)
+
+# View model summary
+summary(model)
+
+```
+
+
+
+
